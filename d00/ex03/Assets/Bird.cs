@@ -16,7 +16,7 @@ public class Bird : MonoBehaviour
         currentFallSpeed += gConstant * Time.deltaTime;
     }
 
-    public bool CheckCollision(GameObject a, GameObject b) {
+    public bool CheckCollision(GameObject a, GameObject b) { //foooo
         bool CollisionX =   a.transform.position.x + a.transform.localScale.x / 2 >= b.transform.position.x - b.transform.localScale.x / 2 &&
                             b.transform.position.x + b.transform.localScale.x / 2 >= a.transform.position.x - a.transform.localScale.x / 2;
         bool CollisionY =   a.transform.position.y + a.transform.localScale.y / 2 >= b.transform.position.y - b.transform.localScale.y / 2 &&
