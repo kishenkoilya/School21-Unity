@@ -32,7 +32,7 @@ public class Bird : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (!gameOver) {
+        if (!gameOver) {//baaar
             Fall();
             foreach (GameObject obj in collisionObjects) {
                 if (CheckCollision(gameObject, obj)) {
