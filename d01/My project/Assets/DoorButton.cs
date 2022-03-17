@@ -10,7 +10,6 @@ public class DoorButton : MonoBehaviour
     public bool doorCloses;
     public List<GameObject> doorsToChooseFrom;
     [SerializeField] private bool isPressed = false;
-    [SerializeField] private bool isOpened = false;
     [SerializeField] private int isOpening = 0; //0 - nor opening nor closing, 1 - opening, -1 - closing
     [SerializeField] private float initialButtonScaleY;
     [SerializeField] private Vector3 initialDoorScale;
@@ -76,7 +75,6 @@ public class DoorButton : MonoBehaviour
             doorToOpen.transform.localScale.z <= resultingDoorScale.z) {
             doorToOpen.transform.localScale = initialDoorScale - openingDirection;
             isOpening = 0;
-            isOpened = true;
         }
     }
 
@@ -89,7 +87,6 @@ public class DoorButton : MonoBehaviour
             doorToOpen.transform.localScale = initialDoorScale;
             doorToOpen.transform.position = initialDoorPosition;
             isOpening = 0;
-            isOpened = false;
         }
     }
 

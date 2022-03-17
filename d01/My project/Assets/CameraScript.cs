@@ -8,33 +8,46 @@ public class CameraScript : MonoBehaviour
 {
     public List<GameObject> Characters;
     public int currentCharacter;
-    public GameObject canvas;
-    public GameObject textSeconds;
+    public List<GameObject> canvasObjects;
 
     [SerializeField] private bool gameOver = false;
+    [SerializeField] private bool levelClear = false;
     [SerializeField] private float timeTilRestart;
     [SerializeField] private float currentTimeTilRestart;
+    [SerializeField] private float timeTilNextLevel;
+    [SerializeField] private float currentTimeTilNextLevel;
     public void GameOver() {
+        if (levelClear) 
+            return;
         gameOver = true;
         timeTilRestart = currentTimeTilRestart = 5;
+        canvasObjects[0].SetActive(true);
+        canvasObjects[2].SetActive(true);
+        canvasObjects[2].GetComponent<UnityEngine.UI.Text>().text = "Restarting in:";
+        canvasObjects[3].SetActive(true);
+        canvasObjects[4].SetActive(false);
     }
     void checkCharactersInExit() {
-        bool levelClear = true;
+        bool levelClearLocal = true;
         foreach (GameObject character in Characters) {
             if (character.activeSelf) {
                 GameObject exit = GameObject.Find(character.name + "_Exit");
                 if (Mathf.Abs(character.transform.position.x - exit.transform.position.x) >= 0.1f ||
                     Mathf.Abs(character.transform.position.y - exit.transform.position.y) >= 0.1f) {
-                    levelClear = false;
+                    levelClearLocal = false;
                     break;
                 }
             }
         }
         // Debug.Log(levelClear + " " + SceneManager.GetActiveScene().buildIndex + " " + (SceneManager.sceneCountInBuildSettings));
-        if (levelClear)
-            Debug.Log("YOU WIN!!!");
-        if (levelClear && SceneManager.GetActiveScene().buildIndex < SceneManager.sceneCountInBuildSettings - 1) {
-            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
+        if (levelClearLocal) {
+            levelClear = true;
+            timeTilNextLevel = currentTimeTilNextLevel = 3;
+            canvasObjects[1].SetActive(true);
+            canvasObjects[2].SetActive(true);
+            canvasObjects[2].GetComponent<UnityEngine.UI.Text>().text = "Next level in:";
+            canvasObjects[3].SetActive(true);
+            canvasObjects[4].SetActive(false);        
         }
     }
     void CameraOnCharacter(int index) {
@@ -63,14 +76,26 @@ public class CameraScript : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (gameOver) {
-            canvas.SetActive(true);
-            textSeconds.GetComponent<Text>().text = "" + (Mathf.Ceil(currentTimeTilRestart));
+        if (levelClear) {
+            canvasObjects[3].GetComponent<Text>().text = "" + (Mathf.Ceil(currentTimeTilNextLevel));
+            currentTimeTilNextLevel -= Time.deltaTime;
+            if (currentTimeTilNextLevel <= 0) {
+                if (SceneManager.GetActiveScene().buildIndex < SceneManager.sceneCountInBuildSettings - 1) {
+                    SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
+                }
+                else {
+                    SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+                }
+            }
+        }
+        else if (gameOver) {
+            canvasObjects[3].GetComponent<Text>().text = "" + (Mathf.Ceil(currentTimeTilRestart));
             currentTimeTilRestart -= Time.deltaTime;
             if (currentTimeTilRestart <= 0) {
                 SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
             }
         }
+
         else {
             checkCharactersInExit();
             if (Input.GetKeyDown(KeyCode.Alpha1)) {

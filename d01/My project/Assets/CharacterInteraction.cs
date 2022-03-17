@@ -69,7 +69,9 @@ public class CharacterInteraction : MonoBehaviour
                             gameObject.transform.position.y - gameObject.transform.localScale.y / 2 - 0.01f),
                             Vector2.down);
             if (hit.collider != null) {
-                if (Mathf.Abs(hit.point.y - (gameObject.transform.position.y - gameObject.transform.localScale.y / 2)) <= 0.017){
+                Debug.Log(hit.point.y + " " + (gameObject.transform.position.y - gameObject.transform.localScale.y / 2) + " " + 
+                (hit.point.y - (gameObject.transform.position.y - gameObject.transform.localScale.y / 2)));
+                if (Mathf.Abs(hit.point.y - (gameObject.transform.position.y - gameObject.transform.localScale.y / 2)) <= 0.018){
                     return true;
                 }
             }
